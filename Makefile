@@ -1,5 +1,6 @@
 
 build: dep vet build-canary
+step-0: create-cluster
 step-1: dry-run deploy-prod
 step-2: dry-run deploy-canary
 
@@ -12,6 +13,10 @@ vet:
 
 build-canary:
 	go build -o ./bin/canary-demo ./cmd/main.go
+
+create-cluster:
+	kind create cluster --name canary --config=./kind.yaml
+	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
 deploy-prod:
 	kubectl apply -f ./deploy/prod-namespace.yaml
@@ -27,4 +32,5 @@ dry-run:
 	kubectl apply -f ./deploy/. --dry-run
 
 clean-up:
-	kubectl delete -f ./deploy/.
+	kind delete cluster --name canary
+

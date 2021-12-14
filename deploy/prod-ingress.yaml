@@ -9,7 +9,7 @@ metadata:
   namespace: demo-prod
 spec:
   rules:
-  - host: canary-demo.example.com
+  - host: localhost 
     http:
       paths:
       - backend:
